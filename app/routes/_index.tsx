@@ -1,21 +1,13 @@
 import type { MetaFunction } from "@remix-run/node";
-import { LinksFunction } from "@remix-run/node";
-import { Link } from '@remix-run/react';
+import { Link } from "@remix-run/react";
 
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "EcoPoints" }
+    { title: "EcoPoints" },
+    { name: "description", content: "Welcome to EcoPoints!" },
   ];
 };
-
-export const links: LinksFunction = () => {
-  return [
-    { rel: "icon", href: "/logo.png", type: "image/png" }, 
-    { rel: "stylesheet", href: "/styles/global.css" }
-  ];
-};
-
 
 export default function Index() {
   return (
@@ -28,7 +20,7 @@ export default function Index() {
           <div className="leftContainer">
           <p className="firstPar"> Turn Trash</p>
           <p className="secPar"> Into Trearure</p>
-          <Link to="/auth/" className="loginBtn">Log In</Link>
+          <Link to="login" className="loginBtn">Go to login</Link>
           {/* <button className="loginBtn"> Log In</button> */}
           </div>
     
