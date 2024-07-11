@@ -6,4 +6,10 @@
 
 body {
   @apply font-poppins;
+  @apply bg-custom-green;
 }
+
+.centered-div {
+  @apply flex items-center justify-center;
+}
+

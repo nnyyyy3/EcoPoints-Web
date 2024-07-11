@@ -13,6 +13,11 @@ const config = {
       },
     },
     extend: {
+      colors: {
+        'custom-green': '#D6EFD8',  
+        'custom-darkgreen': '#508D4E',
+        'custom-superdarkgreen': '#1A5319'
+      },
       fontFamily: { 
         poppins: ['Poppins', 'sans-serif'],
       },
