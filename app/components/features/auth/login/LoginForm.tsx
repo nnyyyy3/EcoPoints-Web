@@ -8,11 +8,13 @@ interface LoginFormProps {
 export function LoginForm({ error }: LoginFormProps) {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
-        <div className="flex w-full max-w-6xl mx-auto bg-white shadow-md" style={{ height: '80vh' }}>
+        <div className="flex w-full max-w-6xl mx-auto bg-white shadow-md" style={{ height: '95vh' }}>
           
           <div className="flex flex-col justify-center w-8/12 p-12">
             <img src='public/logoText.png' alt="logo"></img>
             <h1 className="text-4xl font-bold mb-8 text-center">Log in</h1>
+            {error && <p className="text-red-500 text-center">{error}</p>}
+            
             <form method='post' action='/login'>
                 <div className="mb-4">
                     <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
@@ -26,7 +28,6 @@ export function LoginForm({ error }: LoginFormProps) {
                     className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" 
                     placeholder="Enter your password"/>
                 </div>
-                {error && <p className="text-red-500 text-center mb-4">{error}</p>}
                 <div className="flex justify-center">
                   <button type="submit" className="bg-custom-darkgreen hover:bg-custom-superdarkgreen text-white font-bold py-5 px-6 rounded-lg">Log In</button>
                 </div>

@@ -1,48 +1,61 @@
-import { ActionFunction, json, redirect } from "@remix-run/node";
+import { json, redirect, ActionFunction } from "@remix-run/node";
+import { useActionData } from "@remix-run/react";
+import { auth } from "~/shared/utils/firebase";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { SignupForm } from "~/components/features/auth/signup";
 import { addVendorToFirestore } from "~/shared/services/VendorService";
-import { Vendor } from "~/shared/types";
+import { commitSession, getSession } from "~/shared/session.server";
 
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
-  const displayName = formData.get("displayName") as string;
+  const stallName = formData.get("stallName") as string;
   const ownerName = formData.get("ownerName") as string;
-  const phoneNumber = formData.get("phoneNumber") as string;
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
-  const confirmPassword = formData.get("confirmPassword") as string;
+  const phoneNumber = formData.get("phoneNumber") as string;
   const idPicture = formData.get("idPicture") as File;
+  const profilePicture = formData.get("profilePicture") as File;
 
-  if (!displayName || !ownerName || !phoneNumber || !email || !password || !confirmPassword || !idPicture) {
-    return json({ error: "Form not submitted correctly." }, { status: 400 });
-  }
+  try {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
 
-  if (password !== confirmPassword) {
-    return json({ error: "Passwords do not match." }, { status: 400 });
-  }
+    const vendor = {
+      stallName,
+      ownerName,
+      phoneNumber,
+      email,
+      password,
+      idPicture,
+      vendorID: user.uid,
+      profilePicture,
+    };
 
-  const vendor: Vendor = {
-    displayName,
-    ownerName,
-    phoneNumber,
-    email,
-    password,
-    idPicture,
-  };
+    const { success, error } = await addVendorToFirestore(vendor);
 
-  const result = await addVendorToFirestore(vendor);
+    if (!success) {
+      return json({ error }, { status: 400 });
+    }
 
-  if (result.success) {
-    return redirect("/dashboardRoute");
-  } else {
-    return json({ error: result.error }, { status: 500 });
+    const session = await getSession(request.headers.get("Cookie"));
+    session.set("userId", user.uid);
+
+    return redirect("/dashboardRoute", {
+      headers: {
+        "Set-Cookie": await commitSession(session),
+      },
+    });
+  } catch (error) {
+    return json({ error: (error as Error).message }, { status: 400 });
   }
 };
 
-export default function signup() {
+export default function Signup() {
+  const actionData = useActionData<{ error?: string }>();
+
   return (
     <div>
-      <SignupForm />
+      <SignupForm error={actionData?.error} />
     </div>
   );
 }

@@ -1,7 +1,16 @@
-import { ActionFunction, json, redirect } from "@remix-run/node";
-import { AddRewardForm } from "~/components/addRewards/AddRewardForm";
-import { addRewardToFirestore } from "~/shared/services/productServices";
+import { json, redirect, ActionFunction, LoaderFunction } from "@remix-run/node";
+import { useLoaderData, useActionData } from "@remix-run/react";
 import { getSession } from "~/shared/session.server";
+import { AddRewardForm } from "~/components/addRewards/AddRewardForm";
+import { getVendorByVendorID } from "~/shared/services/VendorService";
+import { addRewardToFirestore } from "~/shared/services/productServices";
+
+export const loader: LoaderFunction = async ({ request }) => {
+  const session = await getSession(request.headers.get("Cookie"));
+  const vendorID = session.get("userId");
+
+  return json({ vendorID });
+};
 
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
@@ -11,41 +20,57 @@ export const action: ActionFunction = async ({ request }) => {
   const expiryDate = formData.get("expiryDate") as string;
   const rewardDescription = formData.get("rewardDescription") as string;
   const rewardPicture = formData.get("rewardPicture") as File;
-
-  if (!rewardName || !requiredPoint || !rewardStock || !expiryDate || !rewardDescription || !rewardPicture) {
-    return json({ error: "Form not submitted correctly." }, { status: 400 });
-  }
+  const category = formData.get("category") as string;
+  const campus = formData.get("campus") as string;
 
   const session = await getSession(request.headers.get("Cookie"));
-  const vendorID = session.get("vendorID");
+  const vendorID = session.get("userId");
 
   if (!vendorID) {
-    return json({ error: "Vendor ID not found." }, { status: 400 });
+    return json({ error: "User not authenticated or session expired." }, { status: 400 });
   }
 
-  const reward = {
-    rewardName,
-    requiredPoint: parseInt(requiredPoint, 10),
-    rewardStock: parseInt(rewardStock, 10),
-    expiryDate,
-    rewardDescription,
-    rewardPicture,
-    vendorID, 
-  };
 
-  const result = await addRewardToFirestore(reward);
+  const vendor = await getVendorByVendorID(vendorID);
+  if (!vendor) {
+    return json({ error: "Vendor not found." }, { status: 400 });
+  }
+  const stallName = vendor.stallName;
 
-  if (result.success) {
+  try {
+    const reward = {
+      rewardName,
+      requiredPoint: Number(requiredPoint),
+      rewardStock: Number(rewardStock),
+      expiryDate,
+      rewardDescription,
+      rewardPicture,
+      vendorID,
+      stallName,
+      category,
+      campus,
+    };
+
+    const { success, error } = await addRewardToFirestore(reward);
+
+    if (!success) {
+      return json({ error }, { status: 400 });
+    }
+
     return redirect("/dashboardRoute");
-  } else {
-    return json({ error: result.error }, { status: 500 });
+  } catch (error) {
+    return json({ error: (error as Error).message }, { status: 400 });
   }
 };
 
 export default function AddRewardRoute() {
+  const actionData = useActionData<{ error?: string }>();
+  const { vendorID } = useLoaderData<{ vendorID: string }>();
+
   return (
     <div>
-      <AddRewardForm />
+      {actionData?.error && <p>{actionData.error}</p>}
+      <AddRewardForm vendorID={vendorID} />
     </div>
   );
 }
