@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "@remix-run/react";
-import SidebarApp from '../Sidebar/SidebarApp';
-import { Navbar } from '../navbar/navBar';
+import SidebarApp from "../Sidebar/SidebarApp";
+import { Navbar } from "../navbar/navBar";
 import { getRewardsFromFirestore } from "~/shared/services/productServices";
 import { Reward } from "~/shared/types";
 

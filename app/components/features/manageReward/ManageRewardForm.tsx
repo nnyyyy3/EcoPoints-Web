@@ -1,6 +1,6 @@
 import { Reward } from "~/shared/types";
-import { Navbar } from "~/components/navbar/navBar";
-import SidebarApp from "~/components/Sidebar/SidebarApp";
+import { Navbar } from "../navbar/navBar";
+import SidebarApp from "../Sidebar/SidebarApp";
 import { Input } from '~/base/components/ui/input';
 
 interface ManageRewardFormProps {

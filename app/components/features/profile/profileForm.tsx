@@ -1,6 +1,6 @@
 import { useLoaderData, Form } from "@remix-run/react";
-import { Navbar } from "~/components/navbar/navBar";
-import SidebarApp from "~/components/Sidebar/SidebarApp";
+import { Navbar } from "../navbar/navBar";
+import SidebarApp from "../Sidebar/SidebarApp";
 import { Vendor } from "~/shared/types";
 
 interface LoaderData {

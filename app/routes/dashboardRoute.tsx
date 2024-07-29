@@ -1,7 +1,7 @@
 import { useLoaderData } from "@remix-run/react";
 import { json, LoaderFunction } from "@remix-run/node";
-import SidebarApp from "~/components/Sidebar/SidebarApp";
-import { Navbar } from "~/components/navbar/navBar";
+import SidebarApp from "~/components/features/Sidebar/SidebarApp";
+import { Navbar } from "~/components/features/navbar/navBar";
 import { getRewardsForVendor } from "~/shared/services/productServices";
 import { getSession } from "~/shared/session.server";
 import { Reward } from "~/shared/types";

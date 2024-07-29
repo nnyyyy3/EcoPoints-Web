@@ -1,7 +1,7 @@
 import { json, redirect, ActionFunction, LoaderFunction } from "@remix-run/node";
 import { useLoaderData, useActionData } from "@remix-run/react";
 import { getSession } from "~/shared/session.server";
-import { AddRewardForm } from "~/components/addRewards/AddRewardForm";
+import { AddRewardForm } from "~/components/features/addRewards/AddRewardForm";
 import { getVendorByVendorID } from "~/shared/services/VendorService";
 import { addRewardToFirestore } from "~/shared/services/productServices";
 

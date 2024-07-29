@@ -1,6 +1,6 @@
 import { useLoaderData } from "@remix-run/react";
-import SidebarApp from "~/components/Sidebar/SidebarApp";
-import { Navbar } from "~/components/navbar/navBar";
+import SidebarApp from "../Sidebar/SidebarApp";
+import { Navbar } from "../navbar/navBar";
 import { Reward } from "~/shared/types";
 
 interface LoaderData {
