@@ -30,6 +30,8 @@ export async function addVendorToFirestore(vendor: Vendor) {
       profilePicture: profilePictureURL,
       createdAt: Timestamp.now(),
       vendorID: vendor.vendorID,
+      status: "Pending",
+      role: "Vendor" 
     });
 
     return { success: true, id: docRef.id };

@@ -27,7 +27,7 @@ export default function LandingPage() {
           <Link to="/learn-more" className="mt-4 inline-block bg-custom-darkgreen text-black py-2 px-5 rounded hover:bg-lime-700 transition duration-300">Learn more</Link>
         </div>
         <div className="rightSide w-1/2">
-          <img src="build/server/assets/landingPagePic.png" className="max-w-full h-auto" alt="Recycling"></img>
+          <img src="/EcoPoints.png" className="max-w-full h-auto" alt="Recycling"></img>
         </div>
       </div>
       <footer className="bg-white text-center p-4">

@@ -9,6 +9,8 @@ export async function addRewardToFirestore(reward: Reward) {
   }
 
   try {
+    console.log("Authenticated vendorID:", reward.vendorID);
+
     const storageRef = ref(storage, `rewardPictures/${(reward.rewardPicture as File).name}`);
     await uploadBytes(storageRef, reward.rewardPicture as File);
     const downloadURL = await getDownloadURL(storageRef);
@@ -42,6 +44,8 @@ export async function addRewardToFirestore(reward: Reward) {
 }
 
 export async function getRewardsForVendor(vendorID: string): Promise<Reward[]> {
+  console.log("Fetching rewards for vendorID:", vendorID); 
+  
   const rewardsCollection = collection(db, "rewards");
   const q = query(rewardsCollection, where("vendorID", "==", vendorID));
   const rewardSnapshot = await getDocs(q);
@@ -57,8 +61,8 @@ export async function getRewardsFromFirestore(): Promise<Reward[]> {
   const rewardSnapshot = await getDocs(rewardsCollection);
   const rewardList = rewardSnapshot.docs.map(doc => ({
     id: doc.id,
-    ...doc.data() as Reward
-  }));
+    ...doc.data()
+  })) as Reward[];
   return rewardList;
 }
 

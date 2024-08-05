@@ -9,7 +9,7 @@ interface DisplayRewardProps {
   vendorID: string;
 }
 
-export function DisplayReward({ vendorID }: DisplayRewardProps) {
+export default function DisplayReward({ vendorID }: DisplayRewardProps) {
   const [rewards, setRewards] = useState<Reward[]>([]);
 
   useEffect(() => {
@@ -40,7 +40,13 @@ export function DisplayReward({ vendorID }: DisplayRewardProps) {
                 <p className="text-gray-700 mt-2">{reward.rewardDescription}</p>
                 <div className="flex justify-between items-center mt-auto">
                   <p className="text-black text-sm">Claim at {reward.stallName}</p> 
-                  <p className="text-gray-500 text-sm">Ends {new Date(reward.expiryDate).toLocaleString()}</p>
+                  {/* <p className="text-gray-500 text-sm">
+                    Ends {
+                      reward.expiryDate
+                        ? new Date(reward.expiryDate.toDate()).toLocaleString()
+                        : "Invalid Date"
+                    }
+                  </p> */}
                 </div>
               </div>
             </Link>

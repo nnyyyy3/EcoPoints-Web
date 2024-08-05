@@ -29,6 +29,8 @@ export const action: ActionFunction = async ({ request }) => {
       idPicture,
       vendorID: user.uid,
       profilePicture,
+      role: "Vendor", 
+      status: "Pending", 
     };
 
     const { success, error } = await addVendorToFirestore(vendor);
@@ -40,7 +42,7 @@ export const action: ActionFunction = async ({ request }) => {
     const session = await getSession(request.headers.get("Cookie"));
     session.set("userId", user.uid);
 
-    return redirect("/dashboardRoute", {
+    return redirect("/login", {
       headers: {
         "Set-Cookie": await commitSession(session),
       },

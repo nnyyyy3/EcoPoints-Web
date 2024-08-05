@@ -5,6 +5,10 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { LoginForm } from "~/components";
 import { commitSession, getSession } from "~/shared/session.server";
 
+const ADMIN_EMAIL = "ecopoints.admin@gmail.com";
+const ADMIN_REDIRECT_PATH = "/admDashRoute";
+const USER_REDIRECT_PATH = "/dashboardRoute";
+
 export const loader: LoaderFunction = () => {
   return json({});
 };
@@ -20,8 +24,15 @@ export const action: ActionFunction = async ({ request }) => {
 
     const session = await getSession(request.headers.get("Cookie"));
     session.set("userId", user.uid);
+    if (email === ADMIN_EMAIL) {
+      session.set("role", "admin");
+    } else {
+      session.set("role", "user");
+    }
 
-    return redirect("/dashboardRoute", {
+    const redirectPath = email === ADMIN_EMAIL ? ADMIN_REDIRECT_PATH : USER_REDIRECT_PATH;
+
+    return redirect(redirectPath, {
       headers: {
         "Set-Cookie": await commitSession(session),
       },

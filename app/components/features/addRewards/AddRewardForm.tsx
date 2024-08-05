@@ -47,6 +47,11 @@ export function AddRewardForm({ vendorID }: AddRewardFormProps) {
               </div>
 
               <div className="col-span-2 sm:col-span-1 text-2xl">
+                <label htmlFor="expiryTime">Expiry Time</label>
+                <Input id="expiryTime" type="time" name="expiryTime" required />
+              </div>
+
+              <div className="col-span-2 sm:col-span-1 text-2xl">
                 <label htmlFor="category">Category</label>
                 <select id="category" name="category" className="w-full border border-gray-300 rounded-md p-2 h-10 text-gray-500 text-sm" required>
                   <option value="">Select Category</option>

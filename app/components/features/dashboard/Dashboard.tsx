@@ -1,14 +1,12 @@
-import { useLoaderData } from "@remix-run/react";
 import SidebarApp from "../Sidebar/SidebarApp";
 import { Navbar } from "../navbar/navBar";
 import { Reward } from "~/shared/types";
 
-interface LoaderData {
+interface DashboardProps {
   rewards: Reward[];
 }
 
-export default function Dashboard() {
-  const { rewards } = useLoaderData<LoaderData>();
+export default function Dashboard({ rewards }: DashboardProps) {
   const labelStyle = { color: "#1F341D" };
 
   return (
@@ -39,7 +37,7 @@ export default function Dashboard() {
                     <tr key={reward.id} className={reward.rewardStock > 0 ? "bg-green-200" : "bg-red-200"}>
                       <td>{reward.rewardName}</td>
                       <td>{reward.rewardStock}</td>
-                      <td>{new Date(reward.expiryDate).toLocaleDateString()}</td>
+                      <td>{new Date(reward.expiryDate.toDate()).toLocaleString()}</td>
                     </tr>
                   ))}
                 </tbody>

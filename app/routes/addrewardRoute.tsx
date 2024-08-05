@@ -4,6 +4,7 @@ import { getSession } from "~/shared/session.server";
 import { AddRewardForm } from "~/components/features/addRewards/AddRewardForm";
 import { getVendorByVendorID } from "~/shared/services/VendorService";
 import { addRewardToFirestore } from "~/shared/services/productServices";
+import { Timestamp } from "firebase/firestore";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const session = await getSession(request.headers.get("Cookie"));
@@ -18,10 +19,14 @@ export const action: ActionFunction = async ({ request }) => {
   const requiredPoint = formData.get("requiredPoint") as string;
   const rewardStock = formData.get("rewardStock") as string;
   const expiryDate = formData.get("expiryDate") as string;
+  const expiryTime = formData.get("expiryTime") as string;
   const rewardDescription = formData.get("rewardDescription") as string;
   const rewardPicture = formData.get("rewardPicture") as File;
   const category = formData.get("category") as string;
   const campus = formData.get("campus") as string;
+
+  const expiryDateTime = new Date(`${expiryDate}T${expiryTime}`);
+  const expiryTimestamp = Timestamp.fromDate(expiryDateTime);
 
   const session = await getSession(request.headers.get("Cookie"));
   const vendorID = session.get("userId");
@@ -42,7 +47,7 @@ export const action: ActionFunction = async ({ request }) => {
       rewardName,
       requiredPoint: Number(requiredPoint),
       rewardStock: Number(rewardStock),
-      expiryDate,
+      expiryDate: expiryTimestamp,
       rewardDescription,
       rewardPicture,
       vendorID,

@@ -1,9 +1,11 @@
+import { Timestamp } from "firebase/firestore";
+
 export interface Reward {
   id?: string;
   rewardName: string;
   requiredPoint: number;
   rewardStock: number;
-  expiryDate: string;
+  expiryDate: Timestamp;
   rewardDescription: string;
   rewardPicture: File | string;
   vendorID: string;
@@ -22,4 +24,5 @@ export interface Vendor {
   idPicture: File | string;
   vendorID: string;
   profilePicture: File | string;
+  status?: string;
 }
